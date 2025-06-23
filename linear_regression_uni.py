@@ -3,7 +3,7 @@ import numpy as np
 def compute_cost(X, y, w, b):
 
     m = X.shape[0]
-    f_wb = np.dot(X,w) + b
+    f_wb = w * X + b
     error = np.square(f_wb - y)
     J = np.sum(error)/ (2*m)
    
@@ -12,18 +12,10 @@ def compute_cost(X, y, w, b):
 
 def gradient_descent(X, y, w, b):
 
-    f_wb = np.dot(X,w) + b
-    m= X.shape[0]
-    dj_dw = 0
-    dj_db = 0
-    for i in range(m):
-        
-        dj_dw += (f_wb[i] - y[i])* X[i]
-        
-        dj_db += (f_wb[i] - y[i])
-    
-    dj_dw = dj_dw/m
-    dj_db = dj_db/m
+    f_wb = w * X + b
+    m= X.shape[0]   
+    dj_dw = np.sum((f_wb - y) * X) / m
+    dj_db = np.sum((f_wb - y)) / m
 
     return dj_dw, dj_db
 
@@ -34,7 +26,7 @@ def compute_gradient_descent(X, y, w, b, alpha, num_iters):
     j_history = []
     p_history = []
 
-    for i in range(num_iters):
+    for i in range(1,num_iters+1):
 
         dj_dw, dj_db = gradient_descent(X, y, w, b)
 
@@ -47,7 +39,7 @@ def compute_gradient_descent(X, y, w, b, alpha, num_iters):
         j_history.append(j)
 
         if i%1000 == 0:
-            print(f"Iteration: {i} | cost: {j} |  ")
+            print(f"Iteration: {i} | cost: {j:.4f} |  ")
 
 
     
@@ -60,8 +52,8 @@ def compute_gradient_descent(X, y, w, b, alpha, num_iters):
 if __name__ == "__main__":
 
    
-    x_train = np.array([1.0, 2.0])   #features
-    y_train = np.array([300.0, 500.0])   #target value
+    x_train = np.array([1.0, 2.0]).reshape(-1,1)   #features
+    y_train = np.array([300.0, 500.0]).reshape(-1,1)   #target value
     alpha = 1.0e-2
     w_in = 0
     b_in = 0
